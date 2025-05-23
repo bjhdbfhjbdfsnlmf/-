@@ -1,0 +1,11 @@
+# Конфигурация базы данных
+DB_USERNAME=postgres
+DB_PASSWORD=umschoolpswd
+DB_NAME=umschooldb
+DB_PORT=5432
+
+# Токен Telegram бота
+BOT_TOKEN=7729923493:AAGggO84vLpLCJFkrdma9vZ8ScySHig5DMM
+
+# ID администраторов
+ADMIN_IDS=ваш_telegram_id
