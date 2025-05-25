@@ -14,10 +14,10 @@ DB_NAME = os.getenv('DB_NAME', 'umschooldb')
 DB_PORT = os.getenv('DB_PORT', '5432')
 
 # Конфигурация Telegram бота
-BOT_TOKEN = '7729923493:AAGggO84vLpLCJFkrdma9vZ8ScySHig5DMM'
+BOT_TOKEN = os.getenv('BOT_TOKEN')
 
 # ID администраторов (через запятую в .env файле)
-ADMIN_IDS = [int(id.strip()) for id in os.getenv('ADMIN_IDS', '796121234').split(',') if id.strip()]
+ADMIN_IDS = [int(id.strip()) for id in os.getenv('ADMIN_IDS', '').split(',') if id.strip()]
 
 # URL для подключения к базе данных
 DATABASE_URL = f'postgresql://{DB_USERNAME}:{DB_PASSWORD}@localhost:{DB_PORT}/{DB_NAME}'
@@ -43,6 +43,8 @@ EMOJI = {
 
 def get_bot_token() -> str:
     """Получить токен бота"""
+    if not BOT_TOKEN:
+        raise ValueError("BOT_TOKEN не найден в переменных окружения")
     return BOT_TOKEN
 
 def get_admin_ids() -> List[int]:
@@ -51,7 +53,9 @@ def get_admin_ids() -> List[int]:
 
 def get_channel_id() -> str:
     """Получить ID канала"""
-    channel_id = 'CHANNEL_ID'
+    channel_id = os.getenv('CHANNEL_ID')
+    if not channel_id:
+        raise ValueError("CHANNEL_ID не найден в переменных окружения")
     return channel_id
 
 def is_admin(user_id: int) -> bool:

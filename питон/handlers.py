@@ -86,10 +86,10 @@ def handle_personal_stats(message):
             bot.reply_to(message, "У вас пока нет статистики.")
             return
             
-        response = "Ваша статистика:\n\n"
-        for question_text, choice_text in stats:
-            response += f"Вопрос: {question_text}\nВаш ответ: {choice_text}\n\n"
-            
+        response = "Ваша статистика:\n\n" + "\n".join(
+            f"Вопрос: {question_text}\nВаш ответ: {choice_text}"
+            for question_text, choice_text in stats
+        )
         bot.reply_to(message, response)
     except Exception as e:
         logger.error(f"Ошибка при получении персональной статистики: {str(e)}")
@@ -103,10 +103,11 @@ def handle_all_stats(message):
             bot.reply_to(message, "Статистика пока отсутствует.")
             return
             
-        response = "Общая статистика:\n\n"
+        response_lines = ["Общая статистика:\n"]
         for question_text, choice_text, count in stats:
-            response += f"Вопрос: {question_text}\nОтвет: {choice_text}\nКоличество: {count}\n\n"
+            response_lines.append(f"Вопрос: {question_text}\nОтвет: {choice_text}\nКоличество: {count}\n")
             
+        response = "\n".join(response_lines)
         bot.reply_to(message, response)
     except Exception as e:
         logger.error(f"Ошибка при получении общей статистики: {str(e)}")
@@ -121,7 +122,7 @@ def handle_answer(call):
         choice_id = int(choice_id)
         
         # Сохраняем ответ пользователя
-        add_user_answer(call.from_user.id, question_id, choice_id)
+        add_user_vote_db(question_id, choice_id, call.from_user.id)
         
         # Отправляем подтверждение
         bot.answer_callback_query(call.id, "Ваш ответ записан!")
